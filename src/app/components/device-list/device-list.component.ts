@@ -157,6 +157,10 @@ export class DeviceListComponent implements OnInit {
   currentFilters: any[] = [];
   private readonly FILTER_STORAGE_KEY = 'deviceListFilters';
   private readonly GLOBAL_SEARCH_KEY = 'deviceListGlobalSearch';
+  private readonly FILTER_VISIBILITY_KEY = 'deviceListShowColumnFilters';
+  searchFocused: boolean = false;
+
+  showColumnFilters: boolean = false;
 
   @ViewChild('dt') dt!: Table;
 
@@ -168,6 +172,8 @@ ngOnInit() {
   if (savedFilters) {
     try {
       this.currentFilters = JSON.parse(savedFilters);
+      const savedVisibility = localStorage.getItem(this.FILTER_VISIBILITY_KEY);
+      this.showColumnFilters = savedVisibility === 'true';
       this.restoreSelectedStatusValues(this.currentFilters);
       setTimeout(() => {
         this.restoreInputFilters(this.currentFilters);
@@ -190,7 +196,10 @@ ngOnInit() {
   });
 }
 
-
+toggleColumnFilters() {
+  this.showColumnFilters = !this.showColumnFilters;
+  localStorage.setItem(this.FILTER_VISIBILITY_KEY, this.showColumnFilters.toString());
+}
   // 🔹 Restore dropdown selected values based on filters
   private restoreSelectedStatusValues(filters: any[]) {
     this.selectedStatusValues = {}; // reset

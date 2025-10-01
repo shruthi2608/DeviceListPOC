@@ -16,6 +16,8 @@ import { CommonModule } from '@angular/common';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TooltipModule } from 'primeng/tooltip';
+import { SidebarModule } from 'primeng/sidebar';
 
 @NgModule({
   declarations: [
@@ -32,9 +34,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     IconFieldModule ,
     InputIconModule ,
     InputTextModule ,
+    SidebarModule,
     MultiSelectModule ,
     CommonModule ,
     ProgressBarModule ,
+    TooltipModule ,
     ButtonModule,
     FormsModule,
     ReactiveFormsModule

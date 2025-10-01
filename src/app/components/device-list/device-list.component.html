@@ -1,14 +1,51 @@
- <!-- <div style="width:90%; margin: 10px auto; text-align:right;">
-    <input
-      type="text"
-      [(ngModel)]="globalSearchText"
-      (keyup.enter)="onGlobalSearch()"
-      placeholder="Search across all fields..."
-      style="padding:6px; width:250px;"
-    />
-    <button (click)="onGlobalSearch()" style="margin-left:5px;">Search</button>
-    <button *ngIf="globalSearchText" (click)="clearGlobalSearch()" style="margin-left:5px;">Clear</button>
-  </div> -->
+<div
+  style="width:90%; margin: 10px auto; display:flex; justify-content:flex-end; align-items:center; gap:8px;"
+>
+  <!-- Search Input -->
+<div style="position: relative; width: 250px;">
+  <!-- Search Icon -->
+  <i
+    class="pi pi-search"
+    style="position:absolute; top:50%; left:8px; transform:translateY(-50%); color:#888;"
+  ></i>
+
+  <!-- PrimeNG Input -->
+  <input
+    pInputText
+    type="text"
+    [(ngModel)]="globalSearchText"
+    (keyup.enter)="onGlobalSearch()"
+    placeholder="Search all fields..."
+    style="padding-left:28px; width:100%; border-radius:4px;"
+  />
+</div>
+
+
+  
+
+  <!-- Clear Button -->
+  <button
+    *ngIf="globalSearchText"
+    pButton
+    type="button"
+    icon="pi pi-times"
+    class="p-button-rounded p-button-outlined p-button-secondary"
+    (click)="clearGlobalSearch()"
+    pTooltip="Clear search"
+  ></button>
+
+  <!-- Show/Hide Filters Icon -->
+  <button
+    pButton
+    type="button"
+    icon="pi pi-filter"
+    class="p-button-rounded p-button-info"
+    (click)="toggleColumnFilters()"
+    pTooltip="{{ showColumnFilters ? 'Hide Column Filters' : 'Show Column Filters' }}"
+  ></button>
+</div>
+
+
 <div class="table-container">
   <p-table
     #dt
@@ -48,41 +85,39 @@
     [totalRecords]="totalRecords"
     (onLazyLoad)="loadDevices($event)"
   >
-    <!-- HEADER -->
-    <ng-template pTemplate="header">
-      <tr>
-        <th *ngFor="let col of columns">{{ col.header }}</th>
-      </tr>
-      <tr>
-        <th *ngFor="let col of columns">
-          <ng-container
-            *ngIf="!statusColumns.includes(col.field); else statusFilter"
-          >
-            <p-columnFilter
-              [field]="col.field"
-              [type]="col.filterType || 'text'"
-              [matchMode]="col.matchMode || 'contains'"
-              placeholder="Search {{ col.header }}"
-              filterOn="input"
-            ></p-columnFilter>
-          </ng-container>
+<!-- HEADER -->
+<ng-template pTemplate="header">
+  <tr>
+    <th *ngFor="let col of columns">{{ col.header }}</th>
+  </tr>
 
-          <ng-template #statusFilter>
-            <p-multiSelect
-              [options]="statusOptionsMap[col.field]"
-              [(ngModel)]="selectedStatusValues[col.field]"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Select {{ col.header }}"
-              [showClear]="true"
-              (onChange)="onStatusChange(col.field, $event.value)"
-              (onClear)="onStatusChange(col.field, [])"
-            >
-            </p-multiSelect>
-          </ng-template>
-        </th>
-      </tr>
-    </ng-template>
+  <tr *ngIf="showColumnFilters">
+    <th *ngFor="let col of columns">
+      <ng-container *ngIf="!statusColumns.includes(col.field); else statusFilter">
+        <p-columnFilter
+          [field]="col.field"
+          [type]="col.filterType || 'text'"
+          [matchMode]="col.matchMode || 'contains'"
+          placeholder="Search {{ col.header }}"
+          filterOn="input"
+        ></p-columnFilter>
+      </ng-container>
+
+      <ng-template #statusFilter>
+        <p-multiSelect
+          [options]="statusOptionsMap[col.field]"
+          [(ngModel)]="selectedStatusValues[col.field]"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select {{ col.header }}"
+          [showClear]="true"
+          (onChange)="onStatusChange(col.field, $event.value)"
+          (onClear)="onStatusChange(col.field, [])"
+        ></p-multiSelect>
+      </ng-template>
+    </th>
+  </tr>
+</ng-template>
 
     <!-- BODY -->
     <ng-template pTemplate="body" let-device>
