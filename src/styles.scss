@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+.p-fluid .p-inputtext {
+    width: auto !important;
+}
+.p-datatable .p-datatable-thead > tr > th {
+    text-align: left;
+    padding: 0.5rem 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-width: 0 0 1px 0;
+    font-weight: 700;
+    color: #374151;
+    background: #f9fafb;
+    transition: box-shadow 0.2s;
+}

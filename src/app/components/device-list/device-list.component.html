@@ -1,0 +1,117 @@
+ <!-- <div style="width:90%; margin: 10px auto; text-align:right;">
+    <input
+      type="text"
+      [(ngModel)]="globalSearchText"
+      (keyup.enter)="onGlobalSearch()"
+      placeholder="Search across all fields..."
+      style="padding:6px; width:250px;"
+    />
+    <button (click)="onGlobalSearch()" style="margin-left:5px;">Search</button>
+    <button *ngIf="globalSearchText" (click)="clearGlobalSearch()" style="margin-left:5px;">Clear</button>
+  </div> -->
+<div class="table-container">
+  <p-table
+    #dt
+    [value]="customers"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5,10, 15, 20]"
+    [loading]="loading"
+    [tableStyle]="{ width: '90%', margin: '0 auto' }"
+    [globalFilterFields]="[
+      'deviceId',
+      'mac',
+      'deviceStatusName',
+      'routerStatus',
+      'packageStatus',
+      'packageStatusId',
+      'productId',
+      'productName',
+      'siM1',
+      'siM1Status',
+      'siM1StatusId',
+      'siM1ProvisioningDate',
+      'siM2',
+      'siM2Status',
+      'siM2StatusId',
+      'siM2ProvisioningDate',
+      'packingDate',
+      'shipmentDate',
+      'customerAccountId',
+      'deviceSerialNumber',
+      'wifiConfiguration',
+      'wifiStatus',
+      'createdBy',
+      'createdOn'
+    ]"
+    [lazy]="true"
+    [totalRecords]="totalRecords"
+    (onLazyLoad)="loadDevices($event)"
+  >
+    <!-- HEADER -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th *ngFor="let col of columns">{{ col.header }}</th>
+      </tr>
+      <tr>
+        <th *ngFor="let col of columns">
+          <ng-container
+            *ngIf="!statusColumns.includes(col.field); else statusFilter"
+          >
+            <p-columnFilter
+              [field]="col.field"
+              [type]="col.filterType || 'text'"
+              [matchMode]="col.matchMode || 'contains'"
+              placeholder="Search {{ col.header }}"
+              filterOn="input"
+            ></p-columnFilter>
+          </ng-container>
+
+          <ng-template #statusFilter>
+            <p-multiSelect
+              [options]="statusOptionsMap[col.field]"
+              [(ngModel)]="selectedStatusValues[col.field]"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Select {{ col.header }}"
+              [showClear]="true"
+              (onChange)="onStatusChange(col.field, $event.value)"
+              (onClear)="onStatusChange(col.field, [])"
+            >
+            </p-multiSelect>
+          </ng-template>
+        </th>
+      </tr>
+    </ng-template>
+
+    <!-- BODY -->
+    <ng-template pTemplate="body" let-device>
+      <tr>
+        <td>{{ device.deviceId }}</td>
+        <td>{{ device.mac }}</td>
+        <td>{{ device.deviceStatusName }}</td>
+        <td>{{ device.routerStatus || "-" }}</td>
+        <td>{{ device.packageStatus || "-" }}</td>
+        <td>{{ device.packageStatusId }}</td>
+        <td>{{ device.productId }}</td>
+        <td>{{ device.productName || "-" }}</td>
+        <td>{{ device.siM1 || "-" }}</td>
+        <td>{{ device.siM1Status || "-" }}</td>
+        <td>{{ device.siM1StatusId }}</td>
+        <td>{{ device.siM1ProvisioningDate | date : "short" }}</td>
+        <td>{{ device.siM2 || "-" }}</td>
+        <td>{{ device.siM2Status || "-" }}</td>
+        <td>{{ device.siM2StatusId }}</td>
+        <td>{{ device.siM2ProvisioningDate | date : "short" }}</td>
+        <td>{{ device.packingDate | date : "short" }}</td>
+        <td>{{ device.shipmentDate | date : "short" }}</td>
+        <td>{{ device.customerAccountId }}</td>
+        <td>{{ device.deviceSerialNumber }}</td>
+        <td>{{ device.wifiConfiguration || "-" }}</td>
+        <td>{{ device.wifiStatus || "-" }}</td>
+        <td>{{ device.createdBy || "-" }}</td>
+        <td>{{ device.createdOn | date : "short" }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

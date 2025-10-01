@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { DeviceService } from '../services/device.service';
+import { DeviceDetail } from '../models/device.model';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'thingverse-poc';
+   customers: DeviceDetail[] = [];
+  constructor(private deviceService: DeviceService) {}
+
+  ngOnInit() {
+
+  }
+
+ 
 }
